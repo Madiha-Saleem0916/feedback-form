@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Share Your Feedback</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #dbeafe, #fce7f3, #ede9fe);
+    min-height: 100vh;
+    padding: 25px 15px;
+}
+
+.container {
+    max-width: 650px;
+    margin: 20px auto;
+    background: white;
+    padding: 35px;
+    border-radius: 22px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+}
+
+h1 {
+    color: #4338ca;
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.description {
+    text-align: center;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.rating-box {
+    text-align: center;
+    background: #f5f3ff;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.rating-emoji {
+    font-size: 55px;
+    margin-bottom: 8px;
+}
+
+#ratingTitle {
+    color: #4338ca;
+    font-size: 24px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin: 18px 0 8px;
+    color: #334155;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.12);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #4338ca, #9333ea);
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    margin-top: 22px;
+    color: #4338ca;
+    text-decoration: none;
+}
+
+#success {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: #dcfce7;
+    color: #166534;
+    border-radius: 12px;
+    text-align: center;
+    line-height: 1.6;
+}
+
+@media (max-width: 500px) {
+    .container {
+        padding: 22px;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💬 Share Your Feedback</h1>
+
+    <p class="description">
+        Thank you for taking the time to share your experience.
+        Your feedback matters to us!
+    </p>
+
+    <div class="rating-box">
+
+        <div class="rating-emoji" id="ratingEmoji">😊</div>
+
+        <h2 id="ratingTitle">Good</h2>
+
+    </div>
+
+    <form id="feedbackForm">
+
+        <label for="name">Your Name *</label>
+
+        <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Enter your full name"
+            required
+        >
+
+        <label for="rating">Overall Experience *</label>
+
+        <select id="rating" name="rating" required>
+            <option value="Excellent">😍 Excellent</option>
+            <option value="Good">😊 Good</option>
+            <option value="Average">😐 Average</option>
+            <option value="Unhappy">😞 Unhappy</option>
+        </select>
+
+        <label for="experience">How was your experience? *</label>
+
+        <select id="experience" name="experience" required>
+            <option value="">Select your experience</option>
+            <option value="Very Satisfied">Very Satisfied</option>
+            <option value="Satisfied">Satisfied</option>
+            <option value="Neutral">Neutral</option>
+            <option value="Dissatisfied">Dissatisfied</option>
+            <option value="Very Dissatisfied">Very Dissatisfied</option>
+        </select>
+
+        <label for="comments">Your Comments *</label>
+
+        <textarea
+            id="comments"
+            name="comments"
+            placeholder="Please share your experience or suggestions..."
+            required
+        ></textarea>
+
+        <button type="submit">Submit Feedback 💜</button>
+
+    </form>
+
+    <div id="success" role="status" aria-live="polite">
+        <h2>🎉 Thank You!</h2>
+        <p>Your feedback has been prepared successfully.</p>
+    </div>
+
+    <a href="index.html" class="back">
+        ← Back to Feedback Options
+    </a>
+
+</div>
+
+<script>
+const ratingSelect = document.getElementById("rating");
+const ratingEmoji = document.getElementById("ratingEmoji");
+const ratingTitle = document.getElementById("ratingTitle");
+
+const emojis = {
+    Excellent: "😍",
+    Good: "😊",
+    Average: "😐",
+    Unhappy: "😞"
+};
+
+// Get selected rating from the URL
+const params = new URLSearchParams(window.location.search);
+const selectedRating = params.get("rating");
+
+const validRatings = ["Excellent", "Good", "Average", "Unhappy"];
+
+if (validRatings.includes(selectedRating)) {
+    ratingSelect.value = selectedRating;
+}
+
+function updateRating() {
+    const rating = ratingSelect.value;
+
+    ratingEmoji.textContent = emojis[rating] || "😊";
+    ratingTitle.textContent = rating;
+}
+
+ratingSelect.addEventListener("change", updateRating);
+
+updateRating();
+
+// Demo form submission
+document.getElementById("feedbackForm").addEventListener(
+    "submit",
+    function(event) {
+        event.preventDefault();
+
+        const feedback = {
+            name: document.getElementById("name").value.trim(),
+            rating: ratingSelect.value,
+            experience: document.getElementById("experience").value,
+            comments: document.getElementById("comments").value.trim()
+        };
+
+        if (!feedback.name || !feedback.experience || !feedback.comments) {
+            alert("Please complete all required fields.");
+            return;
+        }
+
+        // Demo only: saves this submission in the browser.
+        // This is not a central database.
+        const saved = JSON.parse(
+            localStorage.getItem("clientFeedback") || "[]"
+        );
+
+        saved.push({
+            ...feedback,
+            submittedAt: new Date().toISOString()
+        });
+
+        localStorage.setItem("clientFeedback", JSON.stringify(saved));
+
+        document.getElementById("success").style.display = "block";
+
+        document.getElementById("feedbackForm").reset();
+
+        ratingSelect.value = feedback.rating;
+        updateRating();
+
+        document.getElementById("success").scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }
+);
+</script>
+
+</body>
+</html>
